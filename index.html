@@ -1,1 +1,1429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
 
+<title>ADSKING</title>
+
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+<style>
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+  -webkit-tap-highlight-color:transparent;
+}
+
+body{
+  font-family:Arial,Helvetica,sans-serif;
+  background:#0d1117;
+  color:#fff;
+  min-height:100vh;
+}
+
+button{
+  border:0;
+  cursor:pointer;
+  font-family:inherit;
+}
+
+.app{
+  max-width:520px;
+  margin:auto;
+  min-height:100vh;
+  padding-bottom:85px;
+}
+
+/* HEADER */
+
+.header{
+  padding:18px 18px 10px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.logo{
+  width:45px;
+  height:45px;
+  border-radius:50%;
+  object-fit:cover;
+  background:#111;
+  border:2px solid #d9a441;
+}
+
+.brand h1{
+  font-size:20px;
+}
+
+.brand small{
+  display:block;
+  color:#8d98a5;
+  margin-top:3px;
+}
+
+.balance{
+  text-align:right;
+}
+
+.balance small{
+  color:#8d98a5;
+}
+
+.balance strong{
+  display:block;
+  color:#ffd166;
+  font-size:18px;
+}
+
+/* PAGES */
+
+.page{
+  display:none;
+  padding:10px 16px;
+}
+
+.page.active{
+  display:block;
+}
+
+/* CARD */
+
+.card{
+  background:#151d27;
+  border:1px solid #222d39;
+  border-radius:18px;
+  padding:18px;
+  margin-bottom:14px;
+}
+
+/* HOME */
+
+.hero{
+  text-align:center;
+  padding-top:20px;
+}
+
+.hero-logo{
+  width:115px;
+  height:115px;
+  border-radius:50%;
+  object-fit:cover;
+  border:3px solid #d9a441;
+  box-shadow:0 0 30px rgba(255,193,7,.18);
+}
+
+.hero h2{
+  margin-top:14px;
+  font-size:25px;
+}
+
+.hero p{
+  color:#8d98a5;
+  margin-top:6px;
+}
+
+.balance-box{
+  text-align:center;
+  margin-top:22px;
+}
+
+.balance-label{
+  color:#8d98a5;
+  font-size:14px;
+}
+
+.big-balance{
+  font-size:38px;
+  font-weight:bold;
+  color:#ffd166;
+  margin-top:5px;
+}
+
+.coin{
+  color:#f5c451;
+}
+
+.stats{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+  margin-top:18px;
+}
+
+.stat{
+  background:#10161e;
+  border-radius:14px;
+  padding:15px;
+  text-align:center;
+}
+
+.stat span{
+  color:#8d98a5;
+  font-size:12px;
+}
+
+.stat strong{
+  display:block;
+  margin-top:7px;
+  font-size:18px;
+}
+
+.mine-btn{
+  width:100%;
+  margin-top:18px;
+  padding:17px;
+  border-radius:14px;
+  color:#101010;
+  font-weight:bold;
+  font-size:17px;
+  background:linear-gradient(135deg,#ffd166,#e6a82e);
+}
+
+.mine-btn:active{
+  transform:scale(.98);
+}
+
+.energy{
+  margin-top:14px;
+}
+
+.energy-top{
+  display:flex;
+  justify-content:space-between;
+  font-size:13px;
+  color:#9da7b3;
+}
+
+.energy-bar{
+  height:8px;
+  background:#27313c;
+  border-radius:10px;
+  overflow:hidden;
+  margin-top:8px;
+}
+
+.energy-fill{
+  height:100%;
+  width:100%;
+  background:linear-gradient(90deg,#4ade80,#facc15);
+}
+
+/* BOOST */
+
+.boost{
+  border:1px solid #55451e;
+  background:linear-gradient(135deg,#191810,#151d27);
+}
+
+.boost h3{
+  color:#ffd166;
+}
+
+.boost p{
+  color:#9da7b3;
+  font-size:13px;
+  line-height:1.5;
+  margin:8px 0 13px;
+}
+
+.boost-btn{
+  width:100%;
+  padding:13px;
+  border-radius:12px;
+  background:#2b8a3e;
+  color:#fff;
+  font-weight:bold;
+}
+
+/* TITLES */
+
+.title{
+  font-size:23px;
+  margin:10px 0 16px;
+}
+
+.subtitle{
+  color:#8d98a5;
+  font-size:13px;
+  margin-top:-10px;
+  margin-bottom:18px;
+}
+
+/* TASKS */
+
+.task{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  background:#151d27;
+  padding:15px;
+  border-radius:15px;
+  margin-bottom:11px;
+  border:1px solid #222d39;
+}
+
+.task-icon{
+  width:43px;
+  height:43px;
+  border-radius:12px;
+  background:#242f3d;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-size:20px;
+}
+
+.task-info{
+  flex:1;
+}
+
+.task-info strong{
+  font-size:14px;
+}
+
+.task-info small{
+  display:block;
+  color:#87929f;
+  margin-top:4px;
+}
+
+.open{
+  padding:9px 14px;
+  border-radius:10px;
+  background:#e6a82e;
+  color:#111;
+  font-weight:bold;
+  font-size:12px;
+}
+
+.done{
+  background:#245b35;
+  color:#6ee7a0;
+}
+
+/* REQUIREMENTS */
+
+.requirement{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:15px;
+  background:#151d27;
+  border-radius:14px;
+  margin-bottom:10px;
+}
+
+.req-icon{
+  width:40px;
+  height:40px;
+  border-radius:11px;
+  background:#242f3d;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.req-info{
+  flex:1;
+}
+
+.req-info strong{
+  display:block;
+  font-size:14px;
+}
+
+.req-info small{
+  color:#8d98a5;
+}
+
+.req-count{
+  color:#ffd166;
+  font-weight:bold;
+}
+
+/* LEADERBOARD */
+
+.rank{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:13px;
+  background:#151d27;
+  border-radius:13px;
+  margin-bottom:8px;
+}
+
+.rank-number{
+  width:28px;
+  text-align:center;
+  font-weight:bold;
+  color:#ffd166;
+}
+
+.avatar{
+  width:39px;
+  height:39px;
+  border-radius:50%;
+  background:linear-gradient(135deg,#d9a441,#805f19);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:bold;
+}
+
+.rank-name{
+  flex:1;
+}
+
+.rank-name small{
+  display:block;
+  color:#778391;
+  margin-top:3px;
+}
+
+.rank-balance{
+  color:#ffd166;
+  font-weight:bold;
+  font-size:13px;
+}
+
+/* REFERRAL */
+
+.ref-box{
+  text-align:center;
+}
+
+.ref-link{
+  background:#0d131b;
+  padding:13px;
+  border-radius:10px;
+  color:#9da7b3;
+  word-break:break-all;
+  margin:14px 0;
+  font-size:12px;
+}
+
+.copy-btn{
+  width:100%;
+  padding:13px;
+  border-radius:12px;
+  background:#238bd1;
+  color:#fff;
+  font-weight:bold;
+}
+
+/* ROADMAP */
+
+.road{
+  position:relative;
+  padding-left:35px;
+}
+
+.road-item{
+  position:relative;
+  padding-bottom:25px;
+}
+
+.road-item:before{
+  content:"";
+  position:absolute;
+  left:-26px;
+  top:4px;
+  width:13px;
+  height:13px;
+  border-radius:50%;
+  background:#ffd166;
+}
+
+.road-item:after{
+  content:"";
+  position:absolute;
+  left:-20px;
+  top:17px;
+  width:2px;
+  height:55px;
+  background:#303b48;
+}
+
+.road-item:last-child:after{
+  display:none;
+}
+
+.road-item strong{
+  color:#ffd166;
+}
+
+.road-item p{
+  color:#8994a1;
+  font-size:13px;
+  margin-top:5px;
+}
+
+/* BOTTOM NAV */
+
+.nav{
+  position:fixed;
+  bottom:0;
+  left:50%;
+  transform:translateX(-50%);
+  width:100%;
+  max-width:520px;
+  background:#121923;
+  border-top:1px solid #26313d;
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  padding:8px 5px calc(8px + env(safe-area-inset-bottom));
+  z-index:20;
+}
+
+.nav button{
+  background:none;
+  color:#75808d;
+  font-size:10px;
+  padding:6px 2px;
+}
+
+.nav button span{
+  display:block;
+  font-size:20px;
+  margin-bottom:3px;
+}
+
+.nav button.active{
+  color:#ffd166;
+}
+
+/* JOIN */
+
+.join-screen{
+  position:fixed;
+  inset:0;
+  background:#0d1117;
+  z-index:100;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:25px;
+}
+
+.join-box{
+  width:100%;
+  max-width:430px;
+  text-align:center;
+  background:#151d27;
+  border:1px solid #293543;
+  border-radius:22px;
+  padding:28px 20px;
+}
+
+.join-logo{
+  width:95px;
+  height:95px;
+  border-radius:50%;
+  object-fit:cover;
+  border:2px solid #d9a441;
+}
+
+.join-box h2{
+  margin-top:15px;
+}
+
+.join-box p{
+  color:#8994a1;
+  line-height:1.5;
+  font-size:14px;
+  margin:10px 0 20px;
+}
+
+.join-btn{
+  width:100%;
+  padding:15px;
+  border-radius:13px;
+  background:#238bd1;
+  color:#fff;
+  font-weight:bold;
+  margin-bottom:10px;
+}
+
+.check-btn{
+  width:100%;
+  padding:15px;
+  border-radius:13px;
+  background:#2b8a3e;
+  color:#fff;
+  font-weight:bold;
+}
+
+/* TOAST */
+
+.toast{
+  position:fixed;
+  left:50%;
+  bottom:95px;
+  transform:translateX(-50%);
+  background:#26313d;
+  padding:11px 18px;
+  border-radius:10px;
+  display:none;
+  z-index:200;
+  font-size:13px;
+}
+</style>
+</head>
+
+<body>
+
+<div id="joinScreen" class="join-screen">
+
+  <div class="join-box">
+
+    <img class="join-logo"
+      src="https://dummyimage.com/200x200/111827/ffd166.png&text=A">
+
+    <h2>🔒 Join Required</h2>
+
+    <p>
+      ADSKING ব্যবহার করার আগে আমাদের official
+      Channel-এ Join করুন।
+    </p>
+
+    <button class="join-btn"
+      onclick="joinChannel()">
+      📢 JOIN CHANNEL
+    </button>
+
+    <button class="check-btn"
+      onclick="checkJoin()">
+      ✅ I HAVE JOINED
+    </button>
+
+    <p id="joinStatus"></p>
+
+  </div>
+
+</div>
+
+
+<div class="app" id="app">
+
+<!-- HEADER -->
+
+<header class="header">
+
+  <div class="brand">
+
+    <img class="logo"
+      src="https://dummyimage.com/100x100/111827/ffd166.png&text=A">
+
+    <div>
+      <h1>ADSKING</h1>
+      <small id="username">@user</small>
+    </div>
+
+  </div>
+
+  <div class="balance">
+    <small>Balance</small>
+    <strong>
+      <span id="topBalance">0</span> ADSK
+    </strong>
+  </div>
+
+</header>
+
+
+<!-- HOME -->
+
+<section id="home" class="page active">
+
+  <div class="card hero">
+
+    <img class="hero-logo"
+      src="https://dummyimage.com/300x300/111827/ffd166.png&text=A">
+
+    <h2>ADSKING</h2>
+
+    <p>Mine • Earn • Grow</p>
+
+    <div class="balance-box">
+
+      <div class="balance-label">
+        Your Balance
+      </div>
+
+      <div class="big-balance">
+        <span id="balance">0</span>
+        <span class="coin"> ADSK</span>
+      </div>
+
+    </div>
+
+    <div class="stats">
+
+      <div class="stat">
+        <span>Mining Rate</span>
+        <strong>
+          <span id="rate">1</span>/sec
+        </strong>
+      </div>
+
+      <div class="stat">
+        <span>Energy</span>
+        <strong id="energy">100%</strong>
+      </div>
+
+    </div>
+
+    <button class="mine-btn"
+      onclick="mine()">
+      ⛏️ MINE ADSK
+    </button>
+
+    <div class="energy">
+
+      <div class="energy-top">
+        <span>Energy</span>
+        <span id="energyTimer">12:00:00</span>
+      </div>
+
+      <div class="energy-bar">
+        <div class="energy-fill"
+             id="energyFill"></div>
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <div class="card boost">
+
+    <h3>🚀 Boost Upgrade</h3>
+
+    <p>
+      Watch 10 ads to increase your mining
+      power by +1 ADSK/sec.
+    </p>
+
+    <button class="boost-btn"
+      onclick="watchAd()">
+      📺 WATCH AD
+      (<span id="adCount">0</span>/10)
+    </button>
+
+  </div>
+
+</section>
+
+
+<!-- TASKS -->
+
+<section id="tasks" class="page">
+
+  <h2 class="title">📋 Tasks</h2>
+
+  <p class="subtitle">
+    Complete tasks and earn ADSK.
+  </p>
+
+  <div id="taskList">
+
+    <div class="task">
+      <div class="task-icon">📢</div>
+      <div class="task-info">
+        <strong>Join ADSKING Channel</strong>
+        <small>Join @adsking11</small>
+      </div>
+      <button class="open"
+        onclick="taskOpen(this,'channel')">
+        OPEN
+      </button>
+    </div>
+
+    <div class="task">
+      <div class="task-icon">📺</div>
+      <div class="task-info">
+        <strong>Watch Advertisement</strong>
+        <small>Watch an ad</small>
+      </div>
+      <button class="open"
+        onclick="taskOpen(this,'ad')">
+        OPEN
+      </button>
+    </div>
+
+    <div class="task">
+      <div class="task-icon">🎁</div>
+      <div class="task-info">
+        <strong>Daily Bonus</strong>
+        <small>Claim your daily reward</small>
+      </div>
+      <button class="open"
+        onclick="taskOpen(this,'daily')">
+        OPEN
+      </button>
+    </div>
+
+    <div class="task">
+      <div class="task-icon">👥</div>
+      <div class="task-info">
+        <strong>Invite Friends</strong>
+        <small>Invite 1 friend</small>
+      </div>
+      <button class="open"
+        onclick="taskOpen(this,'ref')">
+        OPEN
+      </button>
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- LEADERBOARD -->
+
+<section id="leaderboard" class="page">
+
+  <h2 class="title">🏆 Leaderboard</h2>
+
+  <p class="subtitle">
+    Top ADSKING miners
+  </p>
+
+  <div id="leaderList"></div>
+
+</section>
+
+
+<!-- WALLET -->
+
+<section id="wallet" class="page">
+
+  <h2 class="title">💰 Wallet</h2>
+
+  <div class="card">
+
+    <h3>ADSK Balance</h3>
+
+    <div class="big-balance">
+      <span id="walletBalance">0</span>
+      <span class="coin"> ADSK</span>
+    </div>
+
+  </div>
+
+  <h3 style="margin:20px 0 12px;">
+    Requirements
+  </h3>
+
+  <div class="requirement">
+
+    <div class="req-icon">⭐</div>
+
+    <div class="req-info">
+      <strong>Reach Level 2</strong>
+      <small>Level requirement</small>
+    </div>
+
+    <div class="req-count">0/1</div>
+
+  </div>
+
+  <div class="requirement">
+
+    <div class="req-icon">🔥</div>
+
+    <div class="req-info">
+      <strong>Burn at least 1000 ADSK</strong>
+      <small>Burn requirement</small>
+    </div>
+
+    <div class="req-count">0/1000</div>
+
+  </div>
+
+  <div class="requirement">
+
+    <div class="req-icon">📋</div>
+
+    <div class="req-info">
+      <strong>Complete 2 tasks</strong>
+      <small>Task requirement</small>
+    </div>
+
+    <div class="req-count">0/2</div>
+
+  </div>
+
+  <div class="requirement">
+
+    <div class="req-icon">📺</div>
+
+    <div class="req-info">
+      <strong>Watch 2 ads</strong>
+      <small>Advertisement requirement</small>
+    </div>
+
+    <div class="req-count">
+      <span id="walletAds">0</span>/2
+    </div>
+
+  </div>
+
+  <div class="requirement">
+
+    <div class="req-icon">👥</div>
+
+    <div class="req-info">
+      <strong>Invite 1 friend</strong>
+      <small>Referral requirement</small>
+    </div>
+
+    <div class="req-count">0/1</div>
+
+  </div>
+
+</section>
+
+
+<!-- REFERRAL -->
+
+<section id="referral" class="page">
+
+  <h2 class="title">👥 Referral</h2>
+
+  <p class="subtitle">
+    Invite friends and grow together.
+  </p>
+
+  <div class="card ref-box">
+
+    <h3>Your Referral Link</h3>
+
+    <div class="ref-link"
+         id="refLink">
+      Loading...
+    </div>
+
+    <button class="copy-btn"
+      onclick="copyReferral()">
+      📋 COPY LINK
+    </button>
+
+  </div>
+
+</section>
+
+
+<!-- ROADMAP -->
+
+<section id="roadmap" class="page">
+
+  <h2 class="title">🗺️ Roadmap</h2>
+
+  <div class="card road">
+
+    <div class="road-item">
+      <strong>Phase 1 — Launch</strong>
+      <p>ADSKING Mini App and community launch.</p>
+    </div>
+
+    <div class="road-item">
+      <strong>Phase 2 — Mining</strong>
+      <p>Mining, tasks, ads and referral system.</p>
+    </div>
+
+    <div class="road-item">
+      <strong>Phase 3 — Community</strong>
+      <p>Leaderboard and reward system.</p>
+    </div>
+
+    <div class="road-item">
+      <strong>Phase 4 — Ecosystem</strong>
+      <p>Future ADSK ecosystem development.</p>
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- NAV -->
+
+<nav class="nav">
+
+  <button class="active"
+    onclick="showPage('home',this)">
+    <span>🏠</span>
+    Home
+  </button>
+
+  <button onclick="showPage('tasks',this)">
+    <span>📋</span>
+    Tasks
+  </button>
+
+  <button onclick="showPage('leaderboard',this)">
+    <span>🏆</span>
+    Rank
+  </button>
+
+  <button onclick="showPage('wallet',this)">
+    <span>💰</span>
+    Wallet
+  </button>
+
+  <button onclick="showPage('referral',this)">
+    <span>👥</span>
+    Invite
+  </button>
+
+</nav>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+
+<script>
+
+/* TELEGRAM */
+
+const tg = window.Telegram?.WebApp;
+
+if(tg){
+  tg.ready();
+  tg.expand();
+}
+
+
+/* DATA */
+
+let data = JSON.parse(
+  localStorage.getItem("adsking_data")
+) || {
+  balance:0,
+  rate:1,
+  ads:0,
+  energy:100,
+  tasks:0
+};
+
+
+/* SAVE */
+
+function save(){
+  localStorage.setItem(
+    "adsking_data",
+    JSON.stringify(data)
+  );
+}
+
+
+/* USER */
+
+function setupUser(){
+
+  let user = tg?.initDataUnsafe?.user;
+
+  if(user){
+
+    let name =
+      user.username
+      ? "@"+user.username
+      : (user.first_name || "User");
+
+    document.getElementById("username")
+      .textContent=name;
+
+    document.getElementById("refLink")
+      .textContent=
+      "https://t.me/ADSKING1_BOT?start="+user.id;
+
+  }else{
+
+    document.getElementById("username")
+      .textContent="@guest";
+
+    document.getElementById("refLink")
+      .textContent=
+      "Open ADSKING from Telegram to get your referral link.";
+  }
+}
+
+
+/* UPDATE */
+
+function updateUI(){
+
+  document.getElementById("balance")
+    .textContent=data.balance.toFixed(2);
+
+  document.getElementById("topBalance")
+    .textContent=data.balance.toFixed(2);
+
+  document.getElementById("walletBalance")
+    .textContent=data.balance.toFixed(2);
+
+  document.getElementById("rate")
+    .textContent=data.rate;
+
+  document.getElementById("adCount")
+    .textContent=data.ads;
+
+  document.getElementById("walletAds")
+    .textContent=Math.min(data.ads,2);
+
+  document.getElementById("energy")
+    .textContent=Math.round(data.energy)+"%";
+
+  document.getElementById("energyFill")
+    .style.width=data.energy+"%";
+}
+
+
+/* MINE */
+
+function mine(){
+
+  if(data.energy <= 0){
+
+    toast("⚡ Energy শেষ।");
+
+    return;
+  }
+
+  data.balance += data.rate;
+
+  data.energy -= 1;
+
+  if(data.energy < 0)
+    data.energy=0;
+
+  save();
+  updateUI();
+
+  toast("+"+data.rate+" ADSK mined ⛏️");
+}
+
+
+/* PASSIVE MINING */
+
+setInterval(function(){
+
+  if(data.energy > 0){
+
+    data.balance += data.rate * 5;
+
+    data.energy -= .5;
+
+    if(data.energy < 0)
+      data.energy=0;
+
+    save();
+    updateUI();
+  }
+
+},5000);
+
+
+/* AD */
+
+function watchAd(){
+
+  const ads=[
+    "https://omg10.com/4/7161418",
+    "https://omg10.com/4/7170294",
+    "https://omg10.com/4/7220401",
+    "https://omg10.com/4/11659709",
+    "https://omg10.com/4/9443686",
+    "https://omg10.com/4/7184543",
+    "https://omg10.com/4/7170296",
+    "https://omg10.com/4/7161464"
+  ];
+
+  let url=ads[data.ads % ads.length];
+
+  window.open(url,"_blank");
+
+  data.ads++;
+
+  if(data.ads>=10){
+
+    data.rate++;
+
+    data.ads=0;
+
+    toast("🚀 Boost Complete! Mining +1/sec");
+
+  }else{
+
+    toast("📺 Ad opened. "+data.ads+"/10");
+
+  }
+
+  save();
+  updateUI();
+}
+
+
+/* TASK */
+
+function taskOpen(button,type){
+
+  if(button.classList.contains("done"))
+    return;
+
+  if(type==="channel"){
+
+    window.open(
+      "https://t.me/adsking11",
+      "_blank"
+    );
+
+  }else if(type==="ad"){
+
+    watchAd();
+
+  }else if(type==="daily"){
+
+    data.balance+=10;
+
+    toast("+10 ADSK 🎁");
+
+  }else if(type==="ref"){
+
+    showPage("referral",null);
+
+    return;
+  }
+
+  button.textContent="DONE ✓";
+  button.classList.remove("open");
+  button.classList.add("done");
+
+  data.tasks++;
+
+  save();
+  updateUI();
+}
+
+
+/* JOIN */
+
+function joinChannel(){
+
+  window.open(
+    "https://t.me/adsking11",
+    "_blank"
+  );
+}
+
+
+function checkJoin(){
+
+  /*
+    IMPORTANT:
+    Real Telegram membership verification
+    will be connected through the backend later.
+  */
+
+  localStorage.setItem(
+    "adsking_join_demo",
+    "yes"
+  );
+
+  document.getElementById("joinScreen")
+    .style.display="none";
+
+  toast("✅ Demo verification complete");
+}
+
+
+/* NAVIGATION */
+
+function showPage(id,button){
+
+  document.querySelectorAll(".page")
+    .forEach(p=>p.classList.remove("active"));
+
+  document.getElementById(id)
+    .classList.add("active");
+
+  document.querySelectorAll(".nav button")
+    .forEach(b=>b.classList.remove("active"));
+
+  if(button)
+    button.classList.add("active");
+
+}
+
+
+/* LEADERBOARD DEMO */
+
+function leaderboard(){
+
+  const names=[
+    "ADSKING User",
+    "Crypto King",
+    "Miner Pro",
+    "ADS Hunter",
+    "Diamond",
+    "Trader",
+    "Mining Boss",
+    "Lucky User",
+    "ADSKING Pro",
+    "King Miner"
+  ];
+
+  let html="";
+
+  names.forEach((name,i)=>{
+
+    html+=`
+      <div class="rank">
+
+        <div class="rank-number">
+          ${i+1}
+        </div>
+
+        <div class="avatar">
+          ${name[0]}
+        </div>
+
+        <div class="rank-name">
+          ${name}
+          <small>Miner</small>
+        </div>
+
+        <div class="rank-balance">
+          ${(25000-i*1700).toLocaleString()}
+          ADSK
+        </div>
+
+      </div>
+    `;
+
+  });
+
+  document.getElementById("leaderList")
+    .innerHTML=html;
+}
+
+
+/* COPY */
+
+function copyReferral(){
+
+  let text=
+    document.getElementById("refLink")
+    .textContent;
+
+  navigator.clipboard.writeText(text)
+    .then(()=>{
+      toast("✅ Referral link copied");
+    });
+}
+
+
+/* TOAST */
+
+function toast(message){
+
+  let t=document.getElementById("toast");
+
+  t.textContent=message;
+  t.style.display="block";
+
+  setTimeout(()=>{
+    t.style.display="none";
+  },2200);
+}
+
+
+/* ENERGY TIMER */
+
+let endTime =
+  localStorage.getItem("adsking_energy_end");
+
+if(!endTime){
+
+  endTime=
+    Date.now()+
+    12*60*60*1000;
+
+  localStorage.setItem(
+    "adsking_energy_end",
+    endTime
+  );
+
+}
+
+
+setInterval(function(){
+
+  let diff=
+    Number(endTime)-Date.now();
+
+  if(diff<=0){
+
+    endTime=
+      Date.now()+
+      12*60*60*1000;
+
+    localStorage.setItem(
+      "adsking_energy_end",
+      endTime
+    );
+
+    data.energy=100;
+
+    save();
+
+    diff=
+      Number(endTime)-Date.now();
+  }
+
+  let hours=
+    Math.floor(diff/3600000);
+
+  let minutes=
+    Math.floor(
+      (diff%3600000)/60000
+    );
+
+  let seconds=
+    Math.floor(
+      (diff%60000)/1000
+    );
+
+  document.getElementById("energyTimer")
+    .textContent=
+      String(hours).padStart(2,"0")+":"+
+      String(minutes).padStart(2,"0")+":"+
+      String(seconds).padStart(2,"0");
+
+},1000);
+
+
+/* START */
+
+setupUser();
+updateUI();
+leaderboard();
+
+</script>
+
+</body>
+</html>
